@@ -12,4 +12,11 @@ class Url extends Model
         'expires_at',
         'visit_count',
     ];
+
+    protected $appends = ['last_visit'];
+
+    public function getLastVisitAttribute()
+    {
+        return $this->updated_at->diffForHumans();
+    }
 }

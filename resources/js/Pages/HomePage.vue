@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import CopyIcon from '@/Components/CopyIcon.vue';
 import LinkIcon from '@/Components/LinkIcon.vue';
+import { Url } from '@/types/url';
 import { Head, Link } from '@inertiajs/vue3';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
@@ -12,16 +13,6 @@ defineProps<{
     phpVersion: string;
     appUrl: string;
 }>();
-
-type Url = {
-    id: number;
-    long_url: string;
-    short_code: string;
-    visit_count: Number;
-    expires_at: Date;
-    updated_at: Date;
-    created_at: Date;
-};
 
 const longUrl = ref('');
 const urlList = ref<Url[]>([]);

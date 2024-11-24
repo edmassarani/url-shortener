@@ -29,7 +29,8 @@ class UrlController extends Controller
         $requestsRemaining = null;
 
         if (!$request->user()) {
-            $requestsRemaining = RateLimiter::remaining('shortening', 5);
+            // Tried everything I could to get the correct count, but this doesn't seem to want to give me the number I'm looking for
+            $requestsRemaining = RateLimiter::remaining($request->ip(), 5);
         }
 
         return response()->json(['status' => 'success', 'data' => [...$url->toArray(), 'requests_remaining' => $requestsRemaining], 'message' => 'Url shortened successfully']);
