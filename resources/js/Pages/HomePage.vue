@@ -10,6 +10,7 @@ defineProps<{
     canRegister?: boolean;
     laravelVersion: string;
     phpVersion: string;
+    appUrl: string;
 }>();
 
 type Url = {
@@ -148,7 +149,7 @@ onMounted(() => {
                                         class="rounded-full bg-gray-200 p-2 hover:bg-opacity-70 dark:bg-gray-800"
                                         @click="
                                             navigator.clipboard.writeText(
-                                                `https://127.0.0.1/${url.short_code}`,
+                                                `${appUrl}/${url.short_code}`,
                                             )
                                         "
                                     >
