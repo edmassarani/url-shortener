@@ -27,3 +27,7 @@ composer run dev
 ```
 
 That should start the frontend and backend and you should be able to access the app on `localhost:8000`
+
+## Indexing reasoning
+
+Added indexing only to `short_code` column because that's the only one used to fetch rows at this moment.
