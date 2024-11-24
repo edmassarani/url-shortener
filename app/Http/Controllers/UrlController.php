@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Url;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Tuupola\Base62;
 
 class UrlController extends Controller
@@ -17,7 +18,7 @@ class UrlController extends Controller
     {
         $request->validate(['long_url' => 'required|url', 'expiration' => 'integer|min:1']);
 
-        $shortCode = substr((new Base62())->encode($request->long_url), 0, 10);
+        $shortCode = substr((new Base62())->encode(md5($request->long_url)), 0, 10);
 
         $url = Url::create([
             'short_code' => $shortCode,
@@ -25,7 +26,13 @@ class UrlController extends Controller
             'expires_at' => now()->addHours($request->expiration ?? 24),
         ]);
 
-        return response()->json(['status' => 'success', 'data' => $url, 'message' => 'Url shortened successfully']);
+        $requestsRemaining = null;
+
+        if (!$request->user()) {
+            $requestsRemaining = RateLimiter::remaining('shortening', 5);
+        }
+
+        return response()->json(['status' => 'success', 'data' => [...$url->toArray(), 'requests_remaining' => $requestsRemaining], 'message' => 'Url shortened successfully']);
     }
 
     public function redirect($code)

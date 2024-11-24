@@ -13,10 +13,12 @@ defineProps<{
 
 const longUrl = ref('');
 const urlList = ref([]);
+const requestsRemaining = ref(null);
 
 const submitUrl = () => {
-    axios.post('/urls/shorten', { long_url: longUrl.value }).then(() => {
+    axios.post('/urls/shorten', { long_url: longUrl.value }).then((res) => {
         longUrl.value = '';
+        requestsRemaining.value = res.data.data['requests_remaining'];
         getUrls();
     });
 };
@@ -104,6 +106,14 @@ onMounted(() => {
                                 Shorten Now!
                             </button>
                         </label>
+
+                        <p v-if="requestsRemaining != null">
+                            You can create
+                            <span class="text-laravel-red font-bold">{{
+                                requestsRemaining
+                            }}</span>
+                            more links. Register Now to enjoy unlimited usage
+                        </p>
 
                         <div>
                             {{ urlList }}
